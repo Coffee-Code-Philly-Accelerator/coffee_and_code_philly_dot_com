@@ -1,70 +1,67 @@
-# Getting Started with Create React App
+# Coffee and Code Philly
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Getting Started
 
-## Available Scripts
+To begin working with this project, follow the steps below to set up your local development environment.
 
-In the project directory, you can run:
+1. Install Project Dependencies
 
-### `npm start`
+Run the following command to install the project's dependencies:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```sh
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+npm install
+```
 
-### `npm test`
+If you encounter an error due to not having npm installed, make sure to install Node.js. 2. Authenticate with Firebase
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+The backend of this project is hosted on Firebase. To duplicate the application in your local environment, you need to authenticate with Firebase.
+a. Install the Firebase CLI
 
-### `npm run build`
+You can install the Firebase CLI with the following command:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```sh
+npm install --global firebase-tools
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+b. Login to Firebase
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Authenticate with Firebase by running:
 
-### `npm run eject`
+```sh
+firebase login
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+If you do not have access to our organization's Firebase credentials, request them from a project maintainer. The recommended way is to create an issue with the title Firebase Access Request. Include your name, email, and the reason for requesting access. If approved, a maintainer will provide you with the necessary credentials. 3. Select the Firebase Project
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Set the correct active Firebase project for your working directory by running:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```sh
+firebase use coffee-and-code-philly-website
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+4. Run the Project Locally
 
-## Learn More
+To run the project in your local environment, execute the following command:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```sh
+firebase serve
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+5. Optional: Run Firebase Cloud Functions in a Test Environment
 
-### Code Splitting
+If you would like to run Firebase Cloud Functions locally in a test environment, refer to [this document](https://firebase.google.com/docs/functions/get-started?gen=2nd#emulate-execution-of-your-functions).
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+For a quick start, you can run the following command:
 
-### Analyzing the Bundle Size
+```sh
+firebase emulators:start
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+To verify that a cloud function is working properly, visit the following URL (replace <function_name_here> with the actual function name):
 
-### Making a Progressive Web App
+http://127.0.0.1:5001/coffee-and-code-philly-w-c03af/us-central1/<function_name_here>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+We have a `helloWorld` cloud function that you can use to verify your setup:
 
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+[http://127.0.0.1:5001/coffee-and-code-philly-w-c03af/us-central1/helloWorld](http://127.0.0.1:5001/coffee-and-code-philly-w-c03af/us-central1/helloWorld)
