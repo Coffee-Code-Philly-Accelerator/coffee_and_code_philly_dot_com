@@ -3,35 +3,30 @@
 import React from "react";
 import "style.css";
 import "tailwindcss/lib/css/preflight.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import AnimationRevealPage from "helpers/AnimationRevealPage";
-import Hero from "components/hero/FullWidthWithImage";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AboutUs from "./pages/AboutUs";
 import ContactUs from "pages/ContactUs";
 import BlogIndex from "pages/BlogIndex";
-import Footer from "components/footers/FiveColumnWithInputForm.js";
+import Layout from "pages/Layout";
 import Events from "pages/Events";
+import Home from "pages/Home";
 
-function App() {
-  return (
-    <Router>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <AnimationRevealPage>
-              <Hero />
-              <Footer />
-            </AnimationRevealPage>
-          }
-        />
-        <Route path="/about" element={<AboutUs />} />
-        <Route path="/projects" element={<BlogIndex />} />
-        <Route path="/events" element={<Events />} />
-        <Route path="/contact" element={<ContactUs />} />
-      </Routes>
-    </Router>
-  );
-}
+const App = () => {
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Layout />,
+      children: [
+        { path: "/", element: <Home /> },
+        { path: "/about", element: <AboutUs /> },
+        { path: "/projects", element: <BlogIndex /> },
+        { path: "/events", element: <Events /> },
+        { path: "/contact", element: <ContactUs /> },
+      ],
+    },
+  ]);
+
+  return <RouterProvider router={router} />;
+};
 
 export default App;
