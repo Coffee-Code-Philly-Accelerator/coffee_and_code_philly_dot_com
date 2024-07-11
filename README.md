@@ -4,7 +4,7 @@
 
 To begin working with this project, follow the steps below to set up your local development environment.
 
-1. Install Project Dependencies
+### Install Project Dependencies
 
 Run the following command to install the project's dependencies:
 
@@ -13,7 +13,11 @@ Run the following command to install the project's dependencies:
 npm install
 ```
 
-If you encounter an error due to not having npm installed, make sure to install Node.js. 2. Authenticate with Firebase
+If you encounter an error due to not having npm installed, make sure to install Node.js. 
+
+### Configure the Backend
+
+1. Authenticate with Firebase
 
 The backend of this project is hosted on Firebase. To duplicate the application in your local environment, you need to authenticate with Firebase.
 a. Install the Firebase CLI
@@ -40,7 +44,7 @@ Set the correct active Firebase project for your working directory by running:
 firebase use coffee-and-code-philly-website
 ```
 
-4. Run the Project Locally
+c. Run the Backend Locally
 
 To run the project in your local environment, execute the following command:
 
@@ -48,7 +52,14 @@ To run the project in your local environment, execute the following command:
 firebase serve
 ```
 
-5. Optional: Run Firebase Cloud Functions in a Test Environment
+### Laucnh the Frontend
+
+To launch the Frontend, ensure you have first installed the necessary dependencies, then run the following command:
+```sh
+npm start
+```
+
+### Optional: Run Firebase Cloud Functions in a Test Environment
 
 If you would like to run Firebase Cloud Functions locally in a test environment, refer to [this document](https://firebase.google.com/docs/functions/get-started?gen=2nd#emulate-execution-of-your-functions).
 
