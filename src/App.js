@@ -11,6 +11,7 @@ import ContactUs from "pages/ContactUs";
 import BlogIndex from "pages/BlogIndex";
 import Footer from "components/footers/FiveColumnWithInputForm.js";
 import Events from "pages/Events";
+import OnboardingQuiz from "components/onboarding_quiz/OnboardingQuiz.js";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           element={
             <AnimationRevealPage>
               <Hero />
+              <OnboardingQuiz />
               <Footer />
             </AnimationRevealPage>
           }
@@ -29,6 +31,8 @@ function App() {
         <Route path="/projects" element={<BlogIndex />} />
         <Route path="/events" element={<Events />} />
         <Route path="/contact" element={<ContactUs />} />
+        <Route path="/join-us" element={<OnboardingQuiz />} />{" "}
+        {/* There is no associated page with <OnboardingQuiz />. It is curretnly implemented as a component, not a page */}
       </Routes>
     </Router>
   );
