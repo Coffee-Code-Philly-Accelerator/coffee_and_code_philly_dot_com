@@ -1,13 +1,13 @@
 import React from "react";
 
 /**
- * CustomInput component
+ * VariableChoice component
  *
  * @param {Object} props - The component props.
  * @param {function} props.handleChange - The function to handle input change events.
  * @returns {React.Element} JSX - The rendered input element.
  */
-function CustomInput({ handleChange }) {
+function VariableChoice({ handleChange }) {
   const [value, setValue] = React.useState("");
 
   const onChange = (event) => {
@@ -19,4 +19,4 @@ function CustomInput({ handleChange }) {
   return <input name="custom-choice-input" value={value} onChange={onChange} />;
 }
 
-export default CustomInput;
+export default VariableChoice;
