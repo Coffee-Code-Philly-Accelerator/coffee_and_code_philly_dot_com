@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import CustomChoice from "./CustomChoice"; // Import the CustomInput component
 
 /**
  * QuizQuestion component
@@ -24,11 +23,14 @@ function QuizQuestion({ question, children }) {
   });
 
   return (
-    <fieldset>
-      <legend>{question}</legend>
-      {childrenWithProps}
-      {selectedChoice && <p>Selected choice: {selectedChoice}</p>}
-    </fieldset>
+    <div>
+      <fieldset>
+        <legend>{question}</legend>
+        {childrenWithProps}
+        {selectedChoice && <p>Selected choice: {selectedChoice}</p>}
+      </fieldset>
+      <button>Next Question</button>
+    </div>
   );
 }
 

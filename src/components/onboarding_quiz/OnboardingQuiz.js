@@ -2,15 +2,33 @@ import React from "react";
 import QuizQuestion from "./QuizQuestion";
 import Choices from "./Choices";
 import Choice from "./Choice";
+import VariableChoice from "./VariableChoice";
 
 /**
  *
  * @param {*} props
  * @returns {React.Element} JSX
  */
+function OnboardingQuiz(props) {
+  const [currentQuestion, setCurrentQuestion] = React.useState(0);
+  const [questions, setQuestions] = React.useState([
+    {
+      question: "Would you like to be a member of Coffee and Code Philly?",
+      choices: ["Yes", "No", "Maybe another time"],
+    },
+    {
+      question: "What is 1 + 1?",
+      choices: ["2", "3", "Neither", "Both"],
+    },
+    {
+      question: "In what year did you write your first Hello World program?",
+      choices: [], // Custom input
+    },
+  ]);
+  const [answers, setAnswers] = React.useState([]);
 
-function OnboardinQuiz(props) {
   const handleSubmit = (event) => {
+    event.preventDefault(); // Prevent the page from refreshing.
     console.log(event);
     alert("Thank you for your participation.");
   };
@@ -18,44 +36,36 @@ function OnboardinQuiz(props) {
   return (
     <article>
       <h1>Attempt Membership Challenge</h1>
-      {/** Questions */}
       <form onSubmit={handleSubmit}>
-        <div className="question" id="question-1">
-          <QuizQuestion question="Would you like to be a member of Coffee and Code Philly?">
-            <Choices>
-              <Choice>Yes</Choice>
-              <Choice>No</Choice>
-              <Choice>Maybe another time</Choice>
-            </Choices>
-          </QuizQuestion>
-
-          <div className="question" id="question-2">
-            <QuizQuestion question="What is 1 + 1?">
-              <Choices>
-                <Choice>2</Choice>
-                <Choice>3</Choice>
-                <Choice>Neither</Choice>
-                <Choice>Both</Choice>
-              </Choices>
-            </QuizQuestion>
-          </div>
-
-          <div className="question" id="question-3">
-            <QuizQuestion question="how many years ago from today have you authored your first 'Hello, World!' program?">
-              <Choices>
-                <Choice>Last year</Choice>
-                <Choice>2-4 years ago</Choice>
-                <Choice>5-9 years ago</Choice>
-                <Choice>Never ever</Choice>
-                <Choice>Over 10 years ago</Choice>
-              </Choices>
-            </QuizQuestion>
-          </div>
-        </div>
-        <button role="submit">Submit</button>
+        {questions
+          .filter((_, index) => index === currentQuestion)
+          .map(({ question, choices }, index) => {
+            return (
+              <div
+                className="question"
+                id={`question-${index + 1}`}
+                key={index}
+              >
+                <QuizQuestion question={question}>
+                  <Choices>
+                    {choices.length ? (
+                      // Render radio inputs
+                      choices.map((choice, idx) => (
+                        <Choice key={idx}>{choice}</Choice>
+                      ))
+                    ) : (
+                      // Render text input
+                      <VariableChoice />
+                    )}
+                  </Choices>
+                </QuizQuestion>
+              </div>
+            );
+          })}
+        <button type="submit">Submit</button>
       </form>
     </article>
   );
 }
 
-export default OnboardinQuiz;
+export default OnboardingQuiz;
