@@ -5,14 +5,18 @@ import React from "react";
  *
  * @param {Object} props
  * @param {React.ReactNode} props.children - The choices to be rendered as children.
- * @param {function} props.handleChange - The event handler for change events.
+ * @param {function} props.handleVariableInputChange - The event handle for change events on a text input.
+ * @param {function} props.handleChange - The event handler for change events on a radio input.
  * @returns {React.Element} JSX
  */
-function Choices({ children, handleChange }) {
+function Choices({ children, handleChange, handleVariableInputChange }) {
   // Clone children and pass handleChange as a prop to each Choice component
   const childrenWithProps = React.Children.map(children, (child) => {
     if (React.isValidElement(child)) {
-      return React.cloneElement(child, { handleChange });
+      return React.cloneElement(child, {
+        handleChange,
+        handleVariableInputChange,
+      });
     }
     return child;
   });

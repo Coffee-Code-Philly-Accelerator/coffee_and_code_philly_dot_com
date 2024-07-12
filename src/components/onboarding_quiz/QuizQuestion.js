@@ -8,7 +8,7 @@ import React, { useState } from "react";
  * @param {React.ReactNode} props.children - The choices to be rendered as children.
  * @returns {React.Element} JSX
  */
-function QuizQuestion({ question, children }) {
+function QuizQuestion({ question, onNextQuestion, children }) {
   const [selectedChoice, setSelectedChoice] = useState(null);
 
   const handleChange = (event) => {
@@ -17,7 +17,9 @@ function QuizQuestion({ question, children }) {
 
   const childrenWithProps = React.Children.map(children, (child) => {
     if (React.isValidElement(child)) {
-      return React.cloneElement(child, { handleChange });
+      return React.cloneElement(child, {
+        handleChange,
+      });
     }
     return child;
   });
@@ -26,10 +28,18 @@ function QuizQuestion({ question, children }) {
     <div>
       <fieldset>
         <legend>{question}</legend>
+        {/** Renders choices as children in the form of radio buttons or a custom input */}
         {childrenWithProps}
-        {selectedChoice && <p>Selected choice: {selectedChoice}</p>}
       </fieldset>
-      <button>Next Question</button>
+      <button
+        onClick={(event) => {
+          // Prevent the form from being submitted by cancelling default button behavior within a form
+          event.preventDefault();
+          onNextQuestion(selectedChoice);
+        }}
+      >
+        Next Question
+      </button>
     </div>
   );
 }
