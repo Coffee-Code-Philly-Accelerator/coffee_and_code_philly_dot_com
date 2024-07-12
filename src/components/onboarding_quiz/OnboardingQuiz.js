@@ -10,49 +10,50 @@ import Choice from "./Choice";
  */
 
 function OnboardinQuiz(props) {
-  const handleSubmit = (selectedChoice) => {
-    alert(`You selected: ${selectedChoice}`);
+  const handleSubmit = (event) => {
+    console.log(event);
+    alert("Thank you for your participation.");
   };
 
   return (
     <article>
       <h1>Attempt Membership Challenge</h1>
       {/** Questions */}
-      <div class="question" id="question-1">
-        <QuizQuestion
-          question="Would you like to be a member of Coffee and Code Philly?"
-          onSubmit={handleSubmit}
-        >
-          <Choices>
-            <Choice>Yes</Choice>
-            <Choice>No</Choice>
-            <Choice>Maybe another time</Choice>
-          </Choices>
-        </QuizQuestion>
-
-        <div class="question" id="question-2">
-          <QuizQuestion question="What is 1 + 1?">
+      <form onSubmit={handleSubmit}>
+        <div className="question" id="question-1">
+          <QuizQuestion question="Would you like to be a member of Coffee and Code Philly?">
             <Choices>
-              <Choice>2</Choice>
-              <Choice>3</Choice>
-              <Choice>Neither</Choice>
-              <Choice>Both</Choice>
+              <Choice>Yes</Choice>
+              <Choice>No</Choice>
+              <Choice>Maybe another time</Choice>
             </Choices>
           </QuizQuestion>
-        </div>
 
-        <div class="question" id="question-3">
-          <QuizQuestion question="how many years ago from today have you authored your first 'Hello, World!' program?">
-            <Choices>
-              <Choice>Last year</Choice>
-              <Choice>2-4 years ago</Choice>
-              <Choice>5-9 years ago</Choice>
-              <Choice>Never ever</Choice>
-              <Choice>Over 10 years ago</Choice>
-            </Choices>
-          </QuizQuestion>
+          <div className="question" id="question-2">
+            <QuizQuestion question="What is 1 + 1?">
+              <Choices>
+                <Choice>2</Choice>
+                <Choice>3</Choice>
+                <Choice>Neither</Choice>
+                <Choice>Both</Choice>
+              </Choices>
+            </QuizQuestion>
+          </div>
+
+          <div className="question" id="question-3">
+            <QuizQuestion question="how many years ago from today have you authored your first 'Hello, World!' program?">
+              <Choices>
+                <Choice>Last year</Choice>
+                <Choice>2-4 years ago</Choice>
+                <Choice>5-9 years ago</Choice>
+                <Choice>Never ever</Choice>
+                <Choice>Over 10 years ago</Choice>
+              </Choices>
+            </QuizQuestion>
+          </div>
         </div>
-      </div>
+        <button role="submit">Submit</button>
+      </form>
     </article>
   );
 }
