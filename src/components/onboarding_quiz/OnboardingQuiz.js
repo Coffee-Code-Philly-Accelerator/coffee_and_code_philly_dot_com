@@ -24,19 +24,19 @@ function OnboardinQuiz(props) {
           onSubmit={handleSubmit}
         >
           <Choices>
-            <Choice onSelection={() => {}}>Yes</Choice>
-            <Choice onSelection={() => {}}>No</Choice>
-            <Choice onSelection={() => {}}>Maybe another time</Choice>
+            <Choice>Yes</Choice>
+            <Choice>No</Choice>
+            <Choice>Maybe another time</Choice>
           </Choices>
         </QuizQuestion>
 
         <div class="question" id="question-2">
           <QuizQuestion question="What is 1 + 1?">
             <Choices>
-              <Choice onSelection={() => {}}>2</Choice>
-              <Choice onSelection={() => {}}>3</Choice>
-              <Choice onSelection={() => {}}>Neither</Choice>
-              <Choice onSelection={() => {}}>Both</Choice>
+              <Choice>2</Choice>
+              <Choice>3</Choice>
+              <Choice>Neither</Choice>
+              <Choice>Both</Choice>
             </Choices>
           </QuizQuestion>
         </div>
@@ -44,11 +44,11 @@ function OnboardinQuiz(props) {
         <div class="question" id="question-3">
           <QuizQuestion question="how many years ago from today have you authored your first 'Hello, World!' program?">
             <Choices>
-              <Choice onSelection={() => {}}>Last year</Choice>
-              <Choice onSelection={() => {}}>2-4 years ago</Choice>
-              <Choice onSelection={() => {}}>5-9 years ago</Choice>
-              <Choice onSelection={() => {}}>Never ever</Choice>
-              <Choice onSelection={() => {}}>Over 10 years ago</Choice>
+              <Choice>Last year</Choice>
+              <Choice>2-4 years ago</Choice>
+              <Choice>5-9 years ago</Choice>
+              <Choice>Never ever</Choice>
+              <Choice>Over 10 years ago</Choice>
             </Choices>
           </QuizQuestion>
         </div>
