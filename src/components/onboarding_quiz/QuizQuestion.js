@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import CustomChoice from "./CustomChoice"; // Import the CustomInput component
 
 /**
  * QuizQuestion component
@@ -9,7 +8,7 @@ import CustomChoice from "./CustomChoice"; // Import the CustomInput component
  * @param {React.ReactNode} props.children - The choices to be rendered as children.
  * @returns {React.Element} JSX
  */
-function QuizQuestion({ question, children }) {
+function QuizQuestion({ question, onNextQuestion, children }) {
   const [selectedChoice, setSelectedChoice] = useState(null);
 
   const handleChange = (event) => {
@@ -18,17 +17,30 @@ function QuizQuestion({ question, children }) {
 
   const childrenWithProps = React.Children.map(children, (child) => {
     if (React.isValidElement(child)) {
-      return React.cloneElement(child, { handleChange });
+      return React.cloneElement(child, {
+        handleChange,
+      });
     }
     return child;
   });
 
   return (
-    <fieldset>
-      <legend>{question}</legend>
-      {childrenWithProps}
-      {selectedChoice && <p>Selected choice: {selectedChoice}</p>}
-    </fieldset>
+    <div>
+      <fieldset>
+        <legend>{question}</legend>
+        {/** Renders choices as children in the form of radio buttons or a custom input */}
+        {childrenWithProps}
+      </fieldset>
+      <button
+        onClick={(event) => {
+          // Prevent the form from being submitted by cancelling default button behavior within a form
+          event.preventDefault();
+          onNextQuestion(selectedChoice);
+        }}
+      >
+        Next Question
+      </button>
+    </div>
   );
 }
 

@@ -10,7 +10,7 @@ import React from "react";
  */
 function Choice({ children, handleChange }) {
   return (
-    <label>
+    <>
       <input
         type="radio"
         name="quizChoice"
@@ -18,7 +18,7 @@ function Choice({ children, handleChange }) {
         onChange={handleChange}
       />
       {children}
-    </label>
+    </>
   );
 }
 
