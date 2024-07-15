@@ -4,7 +4,6 @@ import { Container, ContentWithPaddingXl } from "components/misc/Layouts";
 import tw from "twin.macro";
 import { styled, css } from "styled-components";
 import Header from "components/headers/light.js";
-import Footer from "components/footers/FiveColumnWithInputForm.js";
 import { SectionHeading } from "components/misc/Headings";
 import { PrimaryButton } from "components/misc/Buttons";
 
@@ -120,7 +119,6 @@ export default ({
           )}
         </ContentWithPaddingXl>
       </Container>
-      <Footer />
     </AnimationRevealPage>
   );
 };
