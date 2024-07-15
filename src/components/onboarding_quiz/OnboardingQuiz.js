@@ -28,6 +28,11 @@ function OnboardingQuiz(props) {
         "10 or more years ago", // Advanced
       ],
     },
+    {
+      question:
+        "Do you agree to be excellent towards yourself and other members of the Code and Coffee Philly group?",
+      choices: ["Yes", "No"],
+    },
   ]);
   const [answers, setAnswers] = React.useState([]);
 
