@@ -25,7 +25,7 @@ a. Install the Firebase CLI
 You can install the Firebase CLI with the following command:
 
 ```sh
-npm install --global firebase-tools
+npm install --global firebase-functions firebase-admin firebase-tools
 ```
 
 b. Login to Firebase
@@ -38,10 +38,10 @@ firebase login
 
 If you do not have access to our organization's Firebase credentials, request them from a project maintainer. The recommended way is to create an issue with the title Firebase Access Request. Include your name, email, and the reason for requesting access. If approved, a maintainer will provide you with the necessary credentials. 3. Select the Firebase Project
 
-Set the correct active Firebase project for your working directory by running:
+Set the correct active Firebase project for your working directory by running and selecting coffee-and-code-philly-website:
 
 ```sh
-firebase use coffee-and-code-philly-website
+firebase use --add
 ```
 
 c. Run the Backend Locally
