@@ -8,7 +8,6 @@ import AboutUs from "./pages/AboutUs";
 import ContactUs from "pages/ContactUs";
 import BlogIndex from "pages/BlogIndex";
 import Layout from "pages/Layout";
-import Events from "pages/Events";
 import Home from "pages/Home";
 
 const App = () => {
@@ -20,7 +19,6 @@ const App = () => {
         { path: "/", element: <Home /> },
         { path: "/about", element: <AboutUs /> },
         { path: "/projects", element: <BlogIndex /> },
-        { path: "/events", element: <Events /> },
         { path: "/contact", element: <ContactUs /> },
       ],
     },
