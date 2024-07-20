@@ -6,7 +6,7 @@ import "tailwindcss/lib/css/preflight.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AboutUs from "./pages/AboutUs";
 import ContactUs from "pages/ContactUs";
-import BlogIndex from "pages/BlogIndex";
+import Projects from "pages/Projects";
 import Layout from "pages/Layout";
 import Home from "pages/Home";
 
@@ -18,8 +18,8 @@ const App = () => {
       children: [
         { path: "/", element: <Home /> },
         { path: "/about", element: <AboutUs /> },
-        { path: "/projects", element: <BlogIndex /> },
-        { path: "/contact", element: <ContactUs /> },
+        { path: "/projects", element: <Projects /> },
+        { path: "/joinUs", element: <ContactUs /> },
       ],
     },
   ]);
