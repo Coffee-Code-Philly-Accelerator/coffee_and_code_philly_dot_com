@@ -36,7 +36,35 @@ Authenticate with Firebase by running:
 firebase login
 ```
 
-If you do not have access to our organization's Firebase credentials, request them from a project maintainer. The recommended way is to create an issue with the title Firebase Access Request. Include your name, email, and the reason for requesting access. If approved, a maintainer will provide you with the necessary credentials. 3. Select the Firebase Project
+If you cannot access our organization's Firebase credentials, request them from a project maintainer. The recommended way is to create an issue with the title Firebase Access Request. Include your name, email, and the reason for requesting access. If approved, a maintainer will provide you with the necessary credentials. 
+
+2. Create .env file and input Firebase credentials
+a. Create .env file
+
+Navigate to the root directory of the project and execute the following command:
+```sh
+touch .env
+```
+
+b. Paste in env variables
+
+Paste the following text into your new .env file:
+
+```sh
+REACT_APP_FIREBASE_API_KEY=
+REACT_APP_FIREBASE_AUTH_DOMAIN=
+REACT_APP_FIREBASE_DATABASE_URL=
+REACT_APP_FIREBASE_PROJECT_ID=
+REACT_APP_FIREBASE_STORAGE_BUCKET=
+REACT_APP_FIREBASE_MESSAGING_SENDER_ID=
+REACT_APP_FIREBASE_APP_ID=
+REACT_APP_FIREBASE_MEASUREMENT_ID=
+```
+c. Retrieve Firebase Config Variables and Input in .env
+
+Navigate to https://firebase.google.com/. Click Go to console on the top right of the page. Select the "coffee-and-code-philly-website" project. Navigate to the project settings and scroll down to the "Your apps" section. Copy the items from the firebase config for the coffee_and_code_dotcom webapp to their associated variables in the .env file. This step is **required** to successfully run your application locally. 
+
+3. Select the Firebase Project
 
 Set the correct active Firebase project for your working directory by running and selecting coffee-and-code-philly-website:
 
@@ -52,7 +80,7 @@ To run the project in your local environment, execute the following command:
 firebase serve
 ```
 
-### Laucnh the Frontend
+### Launch the Frontend
 
 To launch the Frontend, ensure you have first installed the necessary dependencies, then run the following command:
 ```sh
