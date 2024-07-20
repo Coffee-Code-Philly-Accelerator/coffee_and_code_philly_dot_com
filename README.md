@@ -25,7 +25,7 @@ a. Install the Firebase CLI
 You can install the Firebase CLI with the following command:
 
 ```sh
-npm install --global firebase-functions firebase-admin firebase-tools
+npm install --global firebase-functions firebase-admin firebase-tools firebase
 ```
 
 b. Login to Firebase
