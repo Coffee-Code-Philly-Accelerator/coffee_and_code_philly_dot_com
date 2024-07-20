@@ -1,5 +1,9 @@
 {
   "projects": {
-    "default": "coffee-and-code-philly-w-c03af"
-  }
+    "default": "coffee-and-code-philly-w-c03af",
+    "proj": "coffee-and-code-philly-w-c03af"
+  },
+  "targets": {},
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
 }
