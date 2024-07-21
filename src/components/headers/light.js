@@ -77,7 +77,7 @@ export default ({
         <NavLink href="/">Home</NavLink>
         <NavLink href="/about">About</NavLink>
         <NavLink href="/projects">Projects</NavLink>
-        <NavLink href="/contact">Contact</NavLink>
+        <NavLink href="/joinUs">Join Us</NavLink>
       </NavLinks>
     </NavLinks>,
   ];

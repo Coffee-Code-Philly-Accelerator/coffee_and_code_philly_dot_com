@@ -144,7 +144,8 @@ export default () => {
             <LogoText>Treact Inc.</LogoText>
           </LogoContainer>
           <CopywrightNotice>
-            &copy; 2018 Treact Inc. All Rights Reserved.
+            &copy; {new Date().getFullYear()} Coffee and Code Philadelphia. All
+            Rights
           </CopywrightNotice>
           <SocialLinksContainer>
             <SocialLink href="https://facebook.com">
