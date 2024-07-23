@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import Footer from "components/footers/FiveColumnWithInputForm.js";
+import Footer from "components/footers/MiniCenteredFooter.js";
 
 const Layout = () => {
   return (
