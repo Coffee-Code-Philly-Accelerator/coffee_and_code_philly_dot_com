@@ -7,6 +7,8 @@ import ContactUs from "pages/ContactUs";
 import Layout from "pages/Layout";
 import Home from "pages/Home";
 import OnboardingQuiz from "components/onboarding_quiz/OnboardingQuiz";
+import BlogIndex from "pages/BlogIndex";
+import Events from "pages/Events"; // Import the Events component
 
 const App = () => {
   const router = createBrowserRouter([
@@ -16,8 +18,8 @@ const App = () => {
       children: [
         { path: "/", element: <Home /> },
         { path: "/about", element: <AboutUs /> },
-        // { path: "/projects", element: <BlogIndex /> },
-        // { path: "/events", element: <Events /> },
+        { path: "/projects", element: <BlogIndex /> },
+        { path: "/events", element: <Events /> },
         { path: "/contact", element: <ContactUs /> },
         { path: "/join-us", element: <OnboardingQuiz /> },
       ],
