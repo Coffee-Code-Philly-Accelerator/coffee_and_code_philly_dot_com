@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 
 /**
- * QuizQuestion component
+ * Renders a quiz question component.
  *
- * @param {Object} props
- * @param {string} props.question - The question to be asked.
- * @param {React.ReactNode} props.children - The choices to be rendered as children.
- * @returns {React.Element} JSX
+ * @param {Object} props - The component props.
+ * @param {string} props.question - The question to be displayed.
+ * @param {function} props.onNextQuestion - The function to be called when the "Next Question" button is clicked.
+ * @param {ReactNode} props.children - The choices to be rendered as children.
+ * @returns {JSX.Element} The rendered quiz question component.
  */
+// eslint-disable-next-line react/prop-types
 function QuizQuestion({ question, onNextQuestion, children }) {
   const [selectedChoice, setSelectedChoice] = useState(null);
 
