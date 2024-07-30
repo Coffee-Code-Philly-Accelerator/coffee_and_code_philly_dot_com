@@ -1,15 +1,27 @@
 import React, { useEffect, useState } from "react";
 import AnimationRevealPage from "helpers/AnimationRevealPage";
 import Hero from "components/hero/FullWidthWithImage";
-import ThreeColWithSideImage from "components/features/ThreeColWithSideImage";
+import ThreeColSimple from "components/features/ThreeColSimple.js";
 import { fetchPageData, fetchImageURL } from "../firebase/firebase";
+
+import SupportIconImage from "images/support-icon.svg";
+import BoltImageIcon from "images/fast-icon.svg";
+import ArrowsIconImage from "images/reliable-icon.svg";
+import { Container, ContentWithPaddingXl } from "components/misc/Layouts.js";
 
 const Home = () => {
   const [homeData, sethomeData] = useState({});
 
+  const icons = {
+    SupportIconImage,
+    BoltImageIcon,
+    ArrowsIconImage,
+  };
+
   useEffect(() => {
     const getData = async () => {
       const data = await fetchPageData("home");
+      console.log(data);
       sethomeData(data);
     };
 
@@ -28,12 +40,30 @@ const Home = () => {
           </>
         }
         description={homeData.description}
-        primaryActionUrl="/joinUs"
-        primaryActionText="Join Us"
-        secondaryActionUrl="/projects"
-        secondaryActionText="Projects"
+        primaryActionUrl={homeData.primaryActionUrl}
+        primaryActionText={homeData.primaryActionText}
+        secondaryActionUrl={homeData.secondaryActionUrl}
+        secondaryActionText={homeData.secondaryActionText}
       />
-      <ThreeColWithSideImage />
+      <ThreeColSimple
+        cards={
+          homeData.pillars &&
+          homeData.pillars.map((pillar) => {
+            return {
+              imageSrc: icons[pillar.icon],
+              title: pillar.title,
+              description: pillar.description,
+              url: pillar.url,
+            };
+          })
+        }
+        linkText="Learn More"
+        heading=""
+        subheading=""
+        description=""
+        imageContainerCss={null}
+        imageCss={null}
+      />
     </AnimationRevealPage>
   );
 };
