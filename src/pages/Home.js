@@ -7,10 +7,17 @@ import { fetchPageData, fetchImageURL } from "../firebase/firebase";
 import SupportIconImage from "images/support-icon.svg";
 import BoltImageIcon from "images/fast-icon.svg";
 import ArrowsIconImage from "images/reliable-icon.svg";
-import { Container, ContentWithPaddingXl } from "components/misc/Layouts.js";
+import { Container, ContentWithPaddingLg } from "components/misc/Layouts.js";
+import Calendar from "react-lightweight-calendar";
+import { SectionHeading } from "components/misc/Headings.js";
+import tw from "twin.macro";
+import getFormattedDate from "utils/dates";
+
+const Heading = tw(SectionHeading)`w-full`;
 
 const Home = () => {
   const [homeData, sethomeData] = useState({});
+  const [currentDate, setCurrentDate] = useState(getFormattedDate(new Date()));
 
   const icons = {
     SupportIconImage,
@@ -64,6 +71,20 @@ const Home = () => {
         imageContainerCss={null}
         imageCss={null}
       />
+      <Container>
+        <ContentWithPaddingLg>
+          <Heading>Check out one of our events</Heading>
+          <br />
+          <Calendar
+            data={homeData.calendar}
+            currentView="MONTH"
+            currentDate={currentDate}
+            setCurrentDate={setCurrentDate}
+            activeTimeDateField="startTime" // Or just startTime or just endTime
+            weekStartsOn={1} // Monday
+          />
+        </ContentWithPaddingLg>
+      </Container>
     </AnimationRevealPage>
   );
 };
