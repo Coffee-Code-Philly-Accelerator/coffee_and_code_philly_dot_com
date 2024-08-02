@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
-import { initializeApp } from "firebase/app";
+import { initializeApp, getApps } from "firebase/app";
 import "firebase/firestore";
 
 import reportWebVitals from "./reportWebVitals";
@@ -19,5 +19,7 @@ root.render(
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
 
-// Initialize Firebase (if not already initialized)
-initializeApp({});
+// Check if a Firebase app has already been initialized
+if (!getApps().length) {
+  initializeApp();
+}
