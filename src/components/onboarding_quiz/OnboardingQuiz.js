@@ -4,6 +4,8 @@ import Choices from "./Choices";
 import Choice from "./Choice";
 import { zip } from "ramda";
 
+/**@description This file contains a component that is responsible for the rendering of a quiz that asks the user qualifying questions about their experience with coding and willingness to join the group while complying with our code of conduct. It validates that the user is in a human that exudes excellence and shares our values before displaying our discord and meetup invite links.  */
+
 /**
  *
  * @param {*} props
@@ -19,30 +21,44 @@ const QUESTIONS = {
     "Do you agree to be excellent towards yourself and other members of the Code and Coffee Philly group?",
 };
 
+const CHOICES = {
+  EXPERIENCE_LEVEL: {
+    novice: "less than 1 year",
+    adept: "1-2 years",
+    intermediate: "2-5 years",
+    advanced: "5-8 years",
+    expert: "8-12 years",
+    master: "12+ years",
+  },
+  YES_OR_NO: ["Yes", "No"],
+  ONE_PLUS_ONE: ["2", "3", "Other"],
+};
+
 function OnboardingQuiz(props) {
   const [currentQuestion, setCurrentQuestion] = React.useState(0);
   const [questionsAndChoices, setQuestionsAndChoices] = React.useState([
     {
       question: QUESTIONS.doYouWannnaJoin,
-      choices: ["Yes", "No", "Maybe another time"],
+      choices: CHOICES.YES_OR_NO,
     },
     {
       question: QUESTIONS.doYouHaveCommonSense,
-      choices: ["2", "3", "Neither", "Both"],
+      choices: CHOICES.ONE_PLUS_ONE,
     },
     {
       question: QUESTIONS.guageExperienceLevel,
       choices: [
-        "less than 1 year ago", // Novice
-        "1-3 years ago", // Adept
-        "4-5 years ago", // Intermediate
-        "6-9 years ago", // Expert
-        "10 or more years ago", // Master
+        EXPERIENCE_LEVEL.novice,
+        EXPERIENCE_LEVEL.adept,
+        EXPERIENCE_LEVEL.intermediate,
+        EXPERIENCE_LEVEL.advanced,
+        EXPERIENCE_LEVEL.expert,
+        EXPERIENCE_LEVEL.master,
       ],
     },
     {
       question: QUESTIONS.agreesWithCodeOfConduct,
-      choices: ["Yes", "No"],
+      choices: CHOICES.YES_OR_NO,
     },
   ]);
   const [answers, setAnswers] = React.useState([]);
