@@ -79,47 +79,81 @@ function OnboardingQuiz(props) {
 
   const handleSubmit = (event) => {
     event.preventDefault(); // Prevent the page from refreshing.
-    const passedQuiz = validateAnswers(
-      questionsAndChoices.map(({ question }) => question),
-      answers
-    );
+    const passedQuiz = validateAnswers(QUESTIONS, answers);
     if (passedQuiz) {
       // TODO: If quiz was passed, show discord and meetup links.
       setQuizCompleted(true);
+      const meetupLink = "https://www.meetup.com/coffee-code-philly/"; // TODO: Pull this from firestore
+      alert(`Join our Meetup group; we meet every Saturday: ${meetupLink} `);
     }
 
     // This function validates the answers to the quiz. If all answers are answered and the user wants to join and agrees to the code of conduct, the user passes the quiz. Upon successful completion, the user is shown the discord and meetup links.
-    function validateAnswers(questions, answers) {
+    function validateAnswers(questions = QUESTIONS, usersAnswers = answers) {
       const questionsAndAnswers = zip(questions, answers);
 
-      const allQuestionsHaveBeenAnswered = (questions, answers) =>
-        answers.length === questions.length;
+      class Validator {
+        constructor(...customValidations) {
+          this.questions = QUESTIONS;
+          this.choices = CHOICES;
+          this.validations = [
+            Validations.AllQuestionsHaveBeenAnswered,
+            Validations.WantsToJoin,
+            Validations.AgreesWithCodeOfConduct,
+          ];
 
-      const wantsToJoin = (questions, answers) => {
-        const [, answer] = questionsAndAnswers.filter(
-          ([question]) =>
-            question ===
-            "Would you like to be a member of Coffee and Code Philly?"
-        )[0];
-        return answer === "Yes";
-      };
+          return {
+            questions: this.questions,
+            choices: this.choices,
+            runValidations: function () {
+              return new Promise((resolve, reject) => {
+                Array.from([...this.validations, ...customValidations]).every(
+                  (validator) => validator.apply([this.questions, this.answers])
+                )
+                  ? resolve("All checks have passed")
+                  : reject(
+                      "The following check failed:  " + validator.toString()
+                    );
+              });
+            },
+          };
+        }
 
-      const agreedToCodeOfConduct = (questions, answers) => {
-        const [, answer] = questionsAndAnswers.filter(
-          ([question]) =>
-            question ===
-            "Do you agree to be excellent towards yourself and other members of the Code and Coffee Philly group?"
-        )[0];
-        return answer === "Yes";
-      };
+        static AllQuestionsHaveBeenAnswered = function (
+          questions = this.questions,
+          answers = this.choices
+        ) {
+          return choices.length === questions.length;
+        };
 
-      let validations = [
-        allQuestionsHaveBeenAnswered,
-        wantsToJoin,
-        agreedToCodeOfConduct,
-      ];
+        static WantsToJoin = function (
+          questions = this.questions,
+          choices = this.choices
+        ) {
+          const [, answer] = questions.filter(
+            ([question]) =>
+              question ===
+              "Would you like to be a member of Coffee and Code Philly?"
+          )[0];
+          const [yes, _no] = choices.YES_OR_NO;
+          return answer === yes;
+        };
 
-      return validations.every((validation) => validation(questions, answers));
+        static AgreesWithCodeOfConduct = function (
+          questions = this.questions,
+          choices = this.choices
+        ) {
+          const [, answer] = questions.filter(
+            ([question]) =>
+              question ===
+              "Do you agree to be excellent towards yourself and other members of the Code and Coffee Philly group?"
+          )[0];
+          const [yes, _no] = this.choices.YES_OR_NO;
+          return answer === yes;
+        };
+      }
+
+      const validator = new Validator();
+      return validator.runValidations();
     }
   };
 
