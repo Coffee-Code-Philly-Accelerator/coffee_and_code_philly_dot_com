@@ -1,6 +1,6 @@
 import React from "react";
 import QuizItem from "./QuizItem";
-import { zipObj } from "ramda";
+import { set, zipObj } from "ramda";
 
 /**@description This file contains a component that is responsible for the rendering of a quiz that asks the user qualifying questions about their experience with coding and willingness to join the group while complying with our code of conduct. It validates that the user is in a human that exudes excellence and shares our values before displaying our discord and meetup invite links.  */
 
@@ -56,6 +56,7 @@ function OnboardingQuiz(props) {
   const [answers, setAnswers] = React.useState([]);
   const [meetupLink, setMeetupLink] = React.useState(undefined);
   const [quizCompleted, setQuizCompleted] = React.useState(false);
+  const [quizFailed, setQuizFailed] = React.useState(false);
 
   // React.useEffect(() => {
   //   fetch("/coffee-and-code-philly-w-c03af/us-central1/getMeetupLink", {
@@ -78,11 +79,15 @@ function OnboardingQuiz(props) {
     if (passedQuiz) {
       // TODO: If quiz was passed, show discord and meetup links.
       setQuizCompleted(true);
-      const meetupLink = "https://www.meetup.com/coffee-code-philly/"; // TODO: Pull this from firestore
-      alert(`Join our Meetup group; we meet every Saturday: ${meetupLink} `);
+      setQuizFailed(false);
+      setMeetupLink("https://www.meetup.com/coffee-code-philly/"); // TODO: Pull this from firestore
+    } else {
+      setQuizCompleted(true);
+      setQuizFailed(true);
     }
   };
 
+  //! Fix this: When the user clicks the "next question" button, the previously selected answer will get stored as the new default answer for the current question unless a choice is manually selected before pressing the "next questoin" button.
   const onNextQuestion = (
     currentQuestionState,
     answersState,
@@ -124,9 +129,17 @@ function OnboardingQuiz(props) {
             </div>
           ))}
         {quizCompleted && meetupLink && (
-          <a href={meetupLink} target="_blank" rel="noreferrer">
-            Join our Meetup group
-          </a>
+          <p>
+            <a
+              href={meetupLink}
+              target="_blank"
+              rel="noreferrer"
+              style={{ textDecoration: "underline", color: "blue" }}
+            >
+              Click here
+            </a>{" "}
+            to join our Meetup group
+          </p>
         )}
 
         {/** A user can only submit the quiz once all questions have been answered */}
@@ -149,24 +162,6 @@ class Validator {
    */
   constructor(questions = [], answers = []) {
     /**
-     * The array of questions for the onboarding quiz.
-     * @type {Array<string>}
-     */
-    this.questions = questions;
-
-    /**
-     * The array of user selected answers for the onboarding quiz.
-     * @type {Array<string>}
-     */
-    this.answers = answers;
-
-    /**
-     * The choices available for each question.
-     * @type {Object}
-     */
-    this.choices = CHOICES;
-
-    /**
      * The array of validation functions to be executed.
      * @type {Array<Function>}
      */
@@ -175,7 +170,7 @@ class Validator {
       Validator.AgreesWithCodeOfConduct,
     ];
 
-    this.quizResults = zipObj(Object.values(this.questions), answers);
+    this.quizResults = zipObj(Object.values(questions), answers);
   }
 
   /**
