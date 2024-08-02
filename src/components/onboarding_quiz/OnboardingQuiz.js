@@ -1,8 +1,6 @@
 import React from "react";
-import QuizQuestion from "./QuizQuestion";
-import Choices from "./Choices";
-import Choice from "./Choice";
-import { zip } from "ramda";
+import QuizItem from "./QuizItem";
+import { zipObj } from "ramda";
 
 /**@description This file contains a component that is responsible for the rendering of a quiz that asks the user qualifying questions about their experience with coding and willingness to join the group while complying with our code of conduct. It validates that the user is in a human that exudes excellence and shares our values before displaying our discord and meetup invite links.  */
 
@@ -19,6 +17,7 @@ const QUESTIONS = {
     "In what year did you write your first Hello World program?",
   agreesWithCodeOfConduct:
     "Do you agree to be excellent towards yourself and other members of the Code and Coffee Philly group?",
+  captureEmail: "What is your email address?",
 };
 
 const CHOICES = {
@@ -31,7 +30,7 @@ const CHOICES = {
     master: "12+ years",
   },
   YES_OR_NO: ["Yes", "No"],
-  ONE_PLUS_ONE: ["2", "3", "Other"],
+  ONE_PLUS_ONE: ["3", "2", "Other"],
 };
 
 function OnboardingQuiz(props) {
@@ -47,14 +46,7 @@ function OnboardingQuiz(props) {
     },
     {
       question: QUESTIONS.guageExperienceLevel,
-      choices: [
-        CHOICES.EXPERIENCE_LEVEL.novice,
-        CHOICES.EXPERIENCE_LEVEL.adept,
-        CHOICES.EXPERIENCE_LEVEL.intermediate,
-        CHOICES.EXPERIENCE_LEVEL.advanced,
-        CHOICES.EXPERIENCE_LEVEL.expert,
-        CHOICES.EXPERIENCE_LEVEL.master,
-      ],
+      choices: Object.values(CHOICES.EXPERIENCE_LEVEL),
     },
     {
       question: QUESTIONS.agreesWithCodeOfConduct,
@@ -62,116 +54,51 @@ function OnboardingQuiz(props) {
     },
   ]);
   const [answers, setAnswers] = React.useState([]);
-  const [meetupLink, setMeetupLink] = React.useState("");
+  const [meetupLink, setMeetupLink] = React.useState(undefined);
   const [quizCompleted, setQuizCompleted] = React.useState(false);
 
-  React.useEffect(() => {
-    fetch("/coffee-and-code-philly-w-c03af/us-central1/getMeetupLink", {
-      method: "GET",
-    })
-      // .then((response) => response.json())
-      .then(({ data }) => {
-        console.log("here", data);
-        setMeetupLink(data);
-      })
-      .catch((err) => console.error("whoops", err));
-  }, [quizCompleted]);
+  // React.useEffect(() => {
+  //   fetch("/coffee-and-code-philly-w-c03af/us-central1/getMeetupLink", {
+  //     method: "GET",
+  //   })
+  //     // .then((response) => response.json())
+  //     .then(({ data }) => {
+  //       console.log("here", data);
+  //       setMeetupLink(data);
+  //     })
+  //     .catch((err) => console.error("whoops", err));
+  // }, [quizCompleted]);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault(); // Prevent the page from refreshing.
-    const passedQuiz = validateAnswers(QUESTIONS, answers);
+    const passedQuiz = await new Validator(QUESTIONS, answers)
+      .runValidations(answers)
+      .catch((err) => false);
+
     if (passedQuiz) {
       // TODO: If quiz was passed, show discord and meetup links.
       setQuizCompleted(true);
       const meetupLink = "https://www.meetup.com/coffee-code-philly/"; // TODO: Pull this from firestore
       alert(`Join our Meetup group; we meet every Saturday: ${meetupLink} `);
     }
-
-    // This function validates the answers to the quiz. If all answers are answered and the user wants to join and agrees to the code of conduct, the user passes the quiz. Upon successful completion, the user is shown the discord and meetup links.
-    function validateAnswers(questions = QUESTIONS, usersAnswers = answers) {
-      const questionsAndAnswers = zip(questions, answers);
-
-      class Validator {
-        constructor(...customValidations) {
-          this.questions = QUESTIONS;
-          this.choices = CHOICES;
-          this.validations = [
-            Validator.AllQuestionsHaveBeenAnswered,
-            Validator.WantsToJoin,
-            Validator.AgreesWithCodeOfConduct,
-          ];
-
-          return {
-            questions: this.questions,
-            choices: this.choices,
-            runValidations: function () {
-              return new Promise((resolve, reject) => {
-                Array.from([...this.validations, ...customValidations]).every(
-                  (validator) => validator.apply([this.questions, this.answers])
-                )
-                  ? resolve("All checks have passed")
-                  : reject(
-                      "The following check failed:  " + validator.toString()
-                    );
-              });
-            },
-          };
-        }
-
-        static AllQuestionsHaveBeenAnswered = function (
-          questions = this.questions,
-          choices = this.choices
-        ) {
-          return choices.length === questions.length;
-        };
-
-        static WantsToJoin = function (
-          questions = this.questions,
-          choices = this.choices
-        ) {
-          const [, answer] = questions.filter(
-            ([question]) =>
-              question ===
-              "Would you like to be a member of Coffee and Code Philly?"
-          )[0];
-          const [yes, _no] = choices.YES_OR_NO;
-          return answer === yes;
-        };
-
-        static AgreesWithCodeOfConduct = function (
-          questions = this.questions,
-          choices = this.choices
-        ) {
-          const [, answer] = questions.filter(
-            ([question]) =>
-              question ===
-              "Do you agree to be excellent towards yourself and other members of the Code and Coffee Philly group?"
-          )[0];
-          const [yes, _no] = choices.YES_OR_NO;
-          return answer === yes;
-        };
-      }
-
-      const validator = new Validator();
-      return validator.runValidations();
-    }
   };
 
   const onNextQuestion = (
-    currentQuestionsState,
+    currentQuestionState,
     answersState,
     currentAnswer
   ) => {
     const [currentQuestionIndex, setCurrentQuestionIndex] =
-      currentQuestionsState;
-    const [answers, setAnswers] = answersState;
+      currentQuestionState;
+    const [, setAnswers] = answersState;
 
-    if (currentQuestionIndex <= questionsAndChoices.length) {
-      setAnswers(answers.concat(currentAnswer));
+    if (
+      currentQuestionIndex <= questionsAndChoices.length - 1 &&
+      currentAnswer
+    ) {
+      console.log({ currentAnswer });
+      setAnswers((previousAnswers) => [...previousAnswers, currentAnswer]);
       setCurrentQuestionIndex(currentQuestionIndex + 1);
-    } else {
-      // All questions have been answered
-      handleSubmit();
     }
   };
 
@@ -183,8 +110,9 @@ function OnboardingQuiz(props) {
           .filter((_, index) => index === currentQuestion)
           .map(({ question, choices }, index) => (
             <div className="question" id={`question-${index + 1}`} key={index}>
-              <QuizQuestion
+              <QuizItem
                 question={question}
+                choices={choices}
                 onNextQuestion={(currentAnswer) =>
                   onNextQuestion(
                     [currentQuestion, setCurrentQuestion],
@@ -192,16 +120,10 @@ function OnboardingQuiz(props) {
                     currentAnswer
                   )
                 }
-              >
-                <Choices>
-                  {choices.map((choice, idx) => (
-                    <Choice key={idx}>{choice}</Choice>
-                  ))}
-                </Choices>
-              </QuizQuestion>
+              />
             </div>
           ))}
-        {meetupLink && (
+        {quizCompleted && meetupLink && (
           <a href={meetupLink} target="_blank" rel="noreferrer">
             Join our Meetup group
           </a>
@@ -218,6 +140,86 @@ function OnboardingQuiz(props) {
       </form>
     </article>
   );
+}
+class Validator {
+  /**
+   * Creates an instance of Validator.
+   * @param {Array<string>} questions - The array of questions for the onboarding quiz.
+   * @param {Array<string>} answers - The array of answers for the onboarding quiz.
+   */
+  constructor(questions = [], answers = []) {
+    /**
+     * The array of questions for the onboarding quiz.
+     * @type {Array<string>}
+     */
+    this.questions = questions;
+
+    /**
+     * The array of user selected answers for the onboarding quiz.
+     * @type {Array<string>}
+     */
+    this.answers = answers;
+
+    /**
+     * The choices available for each question.
+     * @type {Object}
+     */
+    this.choices = CHOICES;
+
+    /**
+     * The array of validation functions to be executed.
+     * @type {Array<Function>}
+     */
+    this.validations = [
+      Validator.WantsToJoin,
+      Validator.AgreesWithCodeOfConduct,
+    ];
+
+    this.quizResults = zipObj(Object.values(this.questions), answers);
+  }
+
+  /**
+   * Checks if the user wants to join.
+   * @param {Array<string>} questions - The array of questions.
+   * @param {Array<string>} choices - The array of choices.
+   * @returns {boolean} - True if the user wants to join, false otherwise.
+   */
+  static WantsToJoin(quizResults) {
+    return Object.entries(quizResults).some(([question, answer]) => {
+      const [yes, _no] = CHOICES.YES_OR_NO;
+      return question === QUESTIONS.doYouWannnaJoin && answer === yes;
+    });
+  }
+
+  /**
+   * Checks if the user agrees with the code of conduct.
+   * @param {Array<string>} questions - The array of questions.
+   * @param {Array<string>} choices - The array of choices.
+   * @returns {boolean} - True if the user agrees with the code of conduct, false otherwise.
+   */
+  static AgreesWithCodeOfConduct(quizResults) {
+    return Object.entries(quizResults).some(([question, answer]) => {
+      const [yes, _no] = CHOICES.YES_OR_NO;
+      return question === QUESTIONS.agreesWithCodeOfConduct && answer === yes;
+    });
+  }
+
+  /**
+   * Runs all the validations.
+   * @returns {Promise<boolean>} - A promise that resolves true if all checks have passed, or rejects with false if any check fails.
+   */
+  runValidations() {
+    const allValiadtionsSucceed = this.validations.every((validator) => {
+      return validator.call(null, this.quizResults);
+    });
+    return new Promise((resolve, reject) => {
+      if (allValiadtionsSucceed) {
+        resolve(true);
+      } else {
+        reject(false);
+      }
+    });
+  }
 }
 
 export default OnboardingQuiz;
