@@ -48,12 +48,12 @@ function OnboardingQuiz(props) {
     {
       question: QUESTIONS.guageExperienceLevel,
       choices: [
-        EXPERIENCE_LEVEL.novice,
-        EXPERIENCE_LEVEL.adept,
-        EXPERIENCE_LEVEL.intermediate,
-        EXPERIENCE_LEVEL.advanced,
-        EXPERIENCE_LEVEL.expert,
-        EXPERIENCE_LEVEL.master,
+        CHOICES.EXPERIENCE_LEVEL.novice,
+        CHOICES.EXPERIENCE_LEVEL.adept,
+        CHOICES.EXPERIENCE_LEVEL.intermediate,
+        CHOICES.EXPERIENCE_LEVEL.advanced,
+        CHOICES.EXPERIENCE_LEVEL.expert,
+        CHOICES.EXPERIENCE_LEVEL.master,
       ],
     },
     {
@@ -96,9 +96,9 @@ function OnboardingQuiz(props) {
           this.questions = QUESTIONS;
           this.choices = CHOICES;
           this.validations = [
-            Validations.AllQuestionsHaveBeenAnswered,
-            Validations.WantsToJoin,
-            Validations.AgreesWithCodeOfConduct,
+            Validator.AllQuestionsHaveBeenAnswered,
+            Validator.WantsToJoin,
+            Validator.AgreesWithCodeOfConduct,
           ];
 
           return {
@@ -120,7 +120,7 @@ function OnboardingQuiz(props) {
 
         static AllQuestionsHaveBeenAnswered = function (
           questions = this.questions,
-          answers = this.choices
+          choices = this.choices
         ) {
           return choices.length === questions.length;
         };
@@ -147,7 +147,7 @@ function OnboardingQuiz(props) {
               question ===
               "Do you agree to be excellent towards yourself and other members of the Code and Coffee Philly group?"
           )[0];
-          const [yes, _no] = this.choices.YES_OR_NO;
+          const [yes, _no] = choices.YES_OR_NO;
           return answer === yes;
         };
       }
