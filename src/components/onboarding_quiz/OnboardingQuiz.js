@@ -129,7 +129,12 @@ function OnboardingQuiz(props) {
 
   return (
     <article>
-      <h1>Attempt Membership Challenge</h1>
+      {currentQuestion + 1 <= questionsAndChoices.length && (
+        <h4>
+          Question #<b>{currentQuestion + 1}</b> of{" "}
+          <b>{questionsAndChoices.length}</b>
+        </h4>
+      )}
       <form onSubmit={handleSubmit}>
         {questionsAndChoices
           .filter((_, index) => index === currentQuestion)
@@ -179,9 +184,18 @@ function OnboardingQuiz(props) {
         <button
           type="submit"
           hidden={currentQuestion !== questionsAndChoices.length}
-          style={{ backgroundColor: "hotpink", border: "1px solid blue" }}
+          style={{
+            backgroundColor: "#4CAF50",
+            color: "white",
+            padding: "4px 8px",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
+            marginTop: "5px",
+            fontWeight: "bold",
+          }}
         >
-          Submit
+          Submit Quiz
         </button>
       </form>
     </article>

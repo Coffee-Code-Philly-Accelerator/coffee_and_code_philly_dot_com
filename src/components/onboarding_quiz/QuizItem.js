@@ -23,7 +23,9 @@ function QuizItem({ question, onNextQuestion, choices }) {
   return (
     <div>
       <fieldset>
-        <legend>{question}</legend>
+        <legend>
+          <i>{question}</i>
+        </legend>
         {choices.map((choice, index) => (
           <React.Fragment key={index}>
             <input
@@ -35,13 +37,30 @@ function QuizItem({ question, onNextQuestion, choices }) {
               onChange={handleChange}
               checked={selectedChoice === choice}
             />
-            <label key={index} htmlFor={`${uniqueName}_${choice}`}>
+            <label
+              key={index}
+              htmlFor={`${uniqueName}_${choice}`}
+              style={{
+                paddingLeft: "4px",
+                paddingRight: "8px",
+              }}
+            >
               {choice}
             </label>
           </React.Fragment>
         ))}
       </fieldset>
       <button
+        style={{
+          backgroundColor: "rgb(0, 123, 255)",
+          color: "white",
+          padding: "4px 8px",
+          border: "none",
+          borderRadius: "8px",
+          cursor: "pointer",
+          marginTop: "5px",
+          fontWeight: "bold",
+        }}
         onClick={(event) => {
           // Prevent the form from being submitted
           event.preventDefault();
