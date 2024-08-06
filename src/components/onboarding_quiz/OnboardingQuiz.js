@@ -1,6 +1,8 @@
 import React from "react";
+
 import QuizItem from "./QuizItem";
-import { set, zipObj } from "ramda";
+import { zipObj } from "ramda";
+import { fetchCollectionData } from "../../firebase/firebase";
 
 /**@description This file contains a component that is responsible for the rendering of a quiz that asks the user qualifying questions about their experience with coding and willingness to join the group while complying with our code of conduct. It validates that the user is in a human that exudes excellence and shares our values before displaying our discord and meetup invite links.  */
 
@@ -33,6 +35,11 @@ const CHOICES = {
   ONE_PLUS_ONE: ["3", "2", "Other"],
 };
 
+const Actions = {
+  SET_MEETUP_LINK: "SET_MEETUP_LINK",
+  SET_DISCORD_LINK: "SET_DISCORD_LINK",
+};
+
 function OnboardingQuiz(props) {
   const [currentQuestion, setCurrentQuestion] = React.useState(0);
   const [questionsAndChoices, setQuestionsAndChoices] = React.useState([
@@ -54,20 +61,24 @@ function OnboardingQuiz(props) {
     },
   ]);
   const [answers, setAnswers] = React.useState([]);
-  const [meetupLink, setMeetupLink] = React.useState(undefined);
+  const [socialLinks, dispatch] = React.useReducer(
+    (state, action) => {
+      switch (action.type) {
+        case Actions.SET_MEETUP_LINK:
+          return { ...state, meetupLink: action.payload };
+        case Actions.SET_DISCORD_LINK:
+          return { ...state, discordLink: action.payload };
+        default:
+          return state;
+      }
+    },
+    { meetupLink: "", discordLink: "" } // Fixed typo in 'discordLink'
+  );
   const [quizCompleted, setQuizCompleted] = React.useState(false);
   const [quizFailed, setQuizFailed] = React.useState(false);
 
   // React.useEffect(() => {
-  //   fetch("/coffee-and-code-philly-w-c03af/us-central1/getMeetupLink", {
-  //     method: "GET",
-  //   })
-  //     // .then((response) => response.json())
-  //     .then(({ data }) => {
-  //       console.log("here", data);
-  //       setMeetupLink(data);
-  //     })
-  //     .catch((err) => console.error("whoops", err));
+  //   fetchCollectionData;
   // }, [quizCompleted]);
 
   const handleSubmit = async (event) => {
@@ -80,7 +91,16 @@ function OnboardingQuiz(props) {
       // TODO: If quiz was passed, show discord and meetup links.
       setQuizCompleted(true);
       setQuizFailed(false);
-      setMeetupLink("https://www.meetup.com/coffee-code-philly/"); // TODO: Pull this from firestore
+      fetchCollectionData("important_links")
+        .then((links) => {
+          const meetupLink = JSON.parse(JSON.stringify(links)).meetup_link
+            .hyperlink;
+          const discordLink = JSON.parse(JSON.stringify(links)).discord_link
+            .hyperlink;
+          dispatch({ type: Actions.SET_MEETUP_LINK, payload: meetupLink });
+          dispatch({ type: Actions.SET_DISCORD_LINK, payload: discordLink });
+        })
+        .catch(console.error);
     } else {
       setQuizCompleted(true);
       setQuizFailed(true);
@@ -128,18 +148,31 @@ function OnboardingQuiz(props) {
               />
             </div>
           ))}
-        {quizCompleted && meetupLink && (
-          <p>
-            <a
-              href={meetupLink}
-              target="_blank"
-              rel="noreferrer"
-              style={{ textDecoration: "underline", color: "blue" }}
-            >
-              Click here
-            </a>{" "}
-            to join our Meetup group
-          </p>
+        {quizCompleted && notNullish(socialLinks) && (
+          <div className="social-links">
+            <p>
+              <a
+                href={socialLinks.meetupLink}
+                target="_blank"
+                rel="noreferrer"
+                style={{ textDecoration: "underline", color: "blue" }}
+              >
+                Click here
+              </a>{" "}
+              to join our Meetup group!
+            </p>
+            <p>
+              <a
+                href={socialLinks.discordLink}
+                target="_blank"
+                rel="noreferrer"
+                style={{ textDecoration: "underline", color: "blue" }}
+              >
+                Click here
+              </a>{" "}
+              to join our Discord server!
+            </p>
+          </div>
         )}
 
         {/** A user can only submit the quiz once all questions have been answered */}
@@ -215,6 +248,25 @@ class Validator {
       }
     });
   }
+}
+
+function isPrimitive(val) {
+  return !Array.isArray(val) && !Object.prototype.isPrototypeOf(val);
+}
+
+function notNullish(obj) {
+  return obj !== null && obj !== undefined && isPrimitive(obj)
+    ? Object.values(obj).some(function hasNonDefaultPrimitiveValue(val) {
+        return (
+          val !== "" ||
+          val !== null ||
+          val !== undefined ||
+          val !== false ||
+          val !== 0 ||
+          val !== NaN
+        );
+      })
+    : true;
 }
 
 export default OnboardingQuiz;
