@@ -115,7 +115,6 @@ function OnboardingQuiz(props) {
       currentQuestionIndex <= questionsAndChoices.length - 1 &&
       currentAnswer
     ) {
-      console.log({ currentAnswer });
       setAnswers((previousAnswers) => [...previousAnswers, currentAnswer]);
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
