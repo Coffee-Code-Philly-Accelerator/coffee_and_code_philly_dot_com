@@ -188,7 +188,7 @@ function OnboardingQuiz(props) {
         }}
       >
         {currentQuestion + 1 <= questionsAndChoices.length && (
-          <h4>
+          <h4 style={{ marginTop: "10px" }}>
             Question #<b>{currentQuestion + 1}</b> of{" "}
             <b>{questionsAndChoices.length}</b>
           </h4>
@@ -200,7 +200,7 @@ function OnboardingQuiz(props) {
             width: "75%",
             backgroundColor: "gray",
             height: "10px",
-            marginTop: "10px",
+            margin: "10px",
           }}
         >
           <div
