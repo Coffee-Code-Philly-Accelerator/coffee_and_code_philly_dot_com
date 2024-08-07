@@ -125,7 +125,7 @@ function OnboardingQuiz(props) {
     return (
       <div
         style={{
-          display: "felx",
+          display: "flex",
           flexFlow: "row wrap",
           justifyContent: "center",
           margin: "0 auto",
@@ -141,7 +141,15 @@ function OnboardingQuiz(props) {
           welcome you to our online community. Stay tuned for our newsletter
           which should be released soon!
         </p>
-        <div className="social-links">
+        <div
+          className="social-links"
+          style={{
+            flexBasis: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
           <p>
             <a
               href={socialLinks.meetupLink}
@@ -175,8 +183,7 @@ function OnboardingQuiz(props) {
           flexDirection: "column",
           alignItems: "center",
           margin: "0 auto",
-          maxWidth: "100%",
-          flexBasis: "100%",
+          width: "100%",
           backgroundColor: "beige",
           border: "2px solid brown",
         }}
@@ -187,6 +194,27 @@ function OnboardingQuiz(props) {
             <b>{questionsAndChoices.length}</b>
           </h4>
         )}
+        <div
+          className="progress-bar"
+          style={{
+            flexBasis: "75%",
+            width: "75%",
+            backgroundColor: "gray",
+            height: "10px",
+            marginTop: "10px",
+          }}
+        >
+          <div
+            className="progress-bar"
+            style={{
+              width: `${
+                ((currentQuestion + 1) / questionsAndChoices.length) * 100 - 25
+              }%`,
+              backgroundColor: "green",
+              height: "10px",
+            }}
+          ></div>
+        </div>
         <form onSubmit={handleSubmit}>
           {questionsAndChoices
             .filter((_, index) => index === currentQuestion)
@@ -209,7 +237,6 @@ function OnboardingQuiz(props) {
                       currentAnswer
                     )
                   }
-                  handleSubmit={handleSubmit}
                 />
               </div>
             ))}
