@@ -16,7 +16,7 @@ const QUESTIONS = {
   doYouWannnaJoin: "Would you like to be a member of Coffee and Code Philly?",
   doYouHaveCommonSense: "What is 1 + 1?", // This is a trick question
   guageExperienceLevel:
-    "In what year did you write your first Hello World program?",
+    "How many years ago did you write your first Hello World program?",
   agreesWithCodeOfConduct:
     "Do you agree to be excellent towards yourself and other members of the Code and Coffee Philly group?",
   captureEmail: "What is your email address?",
@@ -77,10 +77,6 @@ function OnboardingQuiz(props) {
   const [quizCompleted, setQuizCompleted] = React.useState(false);
   const [quizFailed, setQuizFailed] = React.useState(false);
 
-  // React.useEffect(() => {
-  //   fetchCollectionData;
-  // }, [quizCompleted]);
-
   const handleSubmit = async (event) => {
     event.preventDefault(); // Prevent the page from refreshing.
     const passedQuiz = await new Validator(QUESTIONS, answers)
@@ -88,7 +84,6 @@ function OnboardingQuiz(props) {
       .catch((err) => false);
 
     if (passedQuiz) {
-      // TODO: If quiz was passed, show discord and meetup links.
       setQuizCompleted(true);
       setQuizFailed(false);
       fetchCollectionData("important_links")
@@ -107,7 +102,6 @@ function OnboardingQuiz(props) {
     }
   };
 
-  //! Fix this: When the user clicks the "next question" button, the previously selected answer will get stored as the new default answer for the current question unless a choice is manually selected before pressing the "next questoin" button.
   const onNextQuestion = (
     currentQuestionState,
     answersState,
@@ -121,71 +115,152 @@ function OnboardingQuiz(props) {
       currentQuestionIndex <= questionsAndChoices.length - 1 &&
       currentAnswer
     ) {
-      console.log({ currentAnswer });
       setAnswers((previousAnswers) => [...previousAnswers, currentAnswer]);
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
   };
 
-  return (
-    <article>
-      <h1>Attempt Membership Challenge</h1>
-      <form onSubmit={handleSubmit}>
-        {questionsAndChoices
-          .filter((_, index) => index === currentQuestion)
-          .map(({ question, choices }, index) => (
-            <div className="question" id={`question-${index + 1}`} key={index}>
-              <QuizItem
-                question={question}
-                choices={choices}
-                onNextQuestion={(currentAnswer) =>
-                  onNextQuestion(
-                    [currentQuestion, setCurrentQuestion],
-                    [answers, setAnswers],
-                    currentAnswer
-                  )
-                }
-              />
-            </div>
-          ))}
-        {quizCompleted && notNullish(socialLinks) && (
-          <div className="social-links">
-            <p>
-              <a
-                href={socialLinks.meetupLink}
-                target="_blank"
-                rel="noreferrer"
-                style={{ textDecoration: "underline", color: "blue" }}
-              >
-                Click here
-              </a>{" "}
-              to join our Meetup group!
-            </p>
-            <p>
-              <a
-                href={socialLinks.discordLink}
-                target="_blank"
-                rel="noreferrer"
-                style={{ textDecoration: "underline", color: "blue" }}
-              >
-                Click here
-              </a>{" "}
-              to join our Discord server!
-            </p>
-          </div>
-        )}
-
-        {/** A user can only submit the quiz once all questions have been answered */}
-        <button
-          type="submit"
-          hidden={currentQuestion !== questionsAndChoices.length}
-          style={{ backgroundColor: "hotpink", border: "1px solid blue" }}
+  if (quizCompleted && !quizFailed && notNullish(socialLinks)) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          flexFlow: "row wrap",
+          justifyContent: "center",
+          margin: "0 auto",
+          backgroundColor: "lightBlue",
+          color: "black",
+          padding: "10px",
+          border: "2px solid blue",
+          borderRadius: "12px",
+        }}
+      >
+        <p>
+          Thank you for displaying your interest in joining us. We would like to
+          welcome you to our online community. Stay tuned for our newsletter
+          which should be released soon!
+        </p>
+        <div
+          className="social-links"
+          style={{
+            flexBasis: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
         >
-          Submit
-        </button>
-      </form>
-    </article>
-  );
+          <p>
+            <a
+              href={socialLinks.meetupLink}
+              target="_blank"
+              rel="noreferrer"
+              style={{ textDecoration: "underline", color: "blue" }}
+            >
+              Click here
+            </a>{" "}
+            to join our Meetup group!
+          </p>
+          <p>
+            <a
+              href={socialLinks.discordLink}
+              target="_blank"
+              rel="noreferrer"
+              style={{ textDecoration: "underline", color: "blue" }}
+            >
+              Click here
+            </a>{" "}
+            to join our Discord server!
+          </p>
+        </div>
+      </div>
+    );
+  } else {
+    return (
+      <article
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          margin: "0 auto",
+          width: "100%",
+          backgroundColor: "beige",
+          border: "2px solid brown",
+        }}
+      >
+        {currentQuestion + 1 <= questionsAndChoices.length && (
+          <h4 style={{ marginTop: "10px" }}>
+            Question #<b>{currentQuestion + 1}</b> of{" "}
+            <b>{questionsAndChoices.length}</b>
+          </h4>
+        )}
+        <div
+          className="progress-bar"
+          style={{
+            flexBasis: "75%",
+            width: "75%",
+            backgroundColor: "gray",
+            height: "10px",
+            margin: "10px",
+          }}
+        >
+          <div
+            className="progress-bar"
+            style={{
+              width: `${
+                ((currentQuestion + 1) / questionsAndChoices.length) * 100 - 25
+              }%`,
+              backgroundColor: "green",
+              height: "10px",
+            }}
+          ></div>
+        </div>
+        <form onSubmit={handleSubmit}>
+          {questionsAndChoices
+            .filter((_, index) => index === currentQuestion)
+            .map(({ question, choices }, index) => (
+              <div
+                className="question"
+                id={`question-${index + 1}`}
+                key={index}
+              >
+                <QuizItem
+                  question={question}
+                  isFinalQuestion={
+                    currentQuestion + 1 === questionsAndChoices.length
+                  }
+                  choices={choices}
+                  onNextQuestion={(currentAnswer) =>
+                    onNextQuestion(
+                      [currentQuestion, setCurrentQuestion],
+                      [answers, setAnswers],
+                      currentAnswer
+                    )
+                  }
+                />
+              </div>
+            ))}
+          {answers.length === questionsAndChoices.length && (
+            <button
+              role="submit"
+              disabled={answers.length !== questionsAndChoices.length}
+              style={{
+                backgroundColor: "#4CAF50",
+                color: "white",
+                padding: "4px 8px",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+                marginTop: "5px",
+                fontWeight: "bold",
+              }}
+            >
+              Submit Quiz
+            </button>
+          )}
+        </form>
+      </article>
+    );
+  }
 }
 class Validator {
   /**
