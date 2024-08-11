@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import tw from "twin.macro";
 import styled from "styled-components";
 // import useAnimatedNavToggler from "../../helpers/useAnimatedNavToggler.js";
-import logo from "../../images/logo.svg";
+import logo from "../../images/code.svg";
 
 const Header = tw.header`
   flex justify-between items-center
@@ -89,7 +89,7 @@ export default ({
   const defaultLogoLink = (
     <LogoLink href="/">
       <img src={logo} alt="logo" />
-      Treact
+      C&CP
     </LogoLink>
   );
 
