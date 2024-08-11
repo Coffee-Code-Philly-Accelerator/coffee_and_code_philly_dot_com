@@ -47,7 +47,7 @@ export default ({
     </>
   ),
   description = "We've been in the hotels business across the world for 5 years now. We assure you that you will always enjoy your stay with us.",
-  primaryActionUrl = "/joinUs",
+  primaryActionUrl = "/join-us",
   primaryActionText = "Join Us",
   secondaryActionUrl = "#",
   secondaryActionText = "",

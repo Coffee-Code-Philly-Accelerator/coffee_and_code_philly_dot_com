@@ -21,13 +21,25 @@ const { getFirestore } = require("firebase-admin/firestore");
 
 initializeApp();
 
-exports.helloWorld = onRequest((request, response) => {
+/**
+ * HTTP Cloud Function that returns "Hello from Firebase!" response.
+ *
+ * @param {Object} request - The HTTP request object.
+ * @param {Object} response - The HTTP response object.
+ * @returns {void}
+ */
+exports.helloWorld = onRequest((req, res) => {
   logger.info("Hello logs!", { structuredData: true });
-  response.send("Hello from Firebase!");
+  res.send("Hello from Firebase!");
 });
 
-// Take the text parameter passed to this HTTP endpoint and insert it into
-// Firestore under the path /messages/:documentId/original
+/**
+ * HTTP Cloud Function that adds a message to Firestore.
+ *
+ * @param {Object} req - The HTTP request object.
+ * @param {Object} res - The HTTP response object.
+ * @returns {Promise<void>}
+ */
 exports.addmessage = onRequest(async (req, res) => {
   // Grab the text parameter.
   const original = req.query.text;
@@ -36,12 +48,16 @@ exports.addmessage = onRequest(async (req, res) => {
     .collection("messages")
     .add({ original: original });
   // Send back a message that we've successfully written the message
-  res.json({ result: `Message with ID: ${writeResult.id} added.` });
+  return res.json({ result: `Message with ID: ${writeResult.id} added.` });
 });
 
-// Listens for new messages added to /messages/:documentId/original
-// and saves an uppercased version of the message
-// to /messages/:documentId/uppercase
+/**
+ * Firestore trigger that listens for new messages added to /messages/:documentId/original
+ * and saves an uppercased version of the message to /messages/:documentId/uppercase.
+ *
+ * @param {Object} event - The Firestore event object.
+ * @returns {Promise<void>}
+ */
 exports.makeuppercase = onDocumentCreated("/messages/{documentId}", (event) => {
   // Grab the current value of what was written to Firestore.
   const original = event.data.data().original;
@@ -56,4 +72,21 @@ exports.makeuppercase = onDocumentCreated("/messages/{documentId}", (event) => {
   // such as writing to Firestore.
   // Setting an 'uppercase' field in Firestore document returns a Promise.
   return event.data.ref.set({ uppercase }, { merge: true });
+});
+
+/**
+ * HTTP Cloud Function that retrieves the Meetup link from Firestore.
+ *
+ * @param {Object} req - The HTTP request object.
+ * @param {Object} res - The HTTP response object.
+ * @returns {Promise<void>}
+ */
+exports.getMeetupLink = onRequest(async (req, res) => {
+  const querySnapshot = await getFirestore()
+    .collection("important_links")
+    .where("name", "==", "Meetup")
+    .get();
+  const meetupLinkSnapshot = querySnapshot.docs[0];
+  const meetupLink = meetupLinkSnapshot.data().hyperlink;
+  return res.status(200).json({ data: meetupLink });
 });

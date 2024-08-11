@@ -1,63 +1,109 @@
 import React from "react";
-import QuizQuestion from "./QuizQuestion";
-import Choices from "./Choices";
-import Choice from "./Choice";
+import QuizItem from "./QuizItem";
+import { set, zipObj } from "ramda";
+
+/**@description This file contains a component that is responsible for the rendering of a quiz that asks the user qualifying questions about their experience with coding and willingness to join the group while complying with our code of conduct. It validates that the user is in a human that exudes excellence and shares our values before displaying our discord and meetup invite links.  */
 
 /**
  *
  * @param {*} props
  * @returns {React.Element} JSX
  */
+
+const QUESTIONS = {
+  doYouWannnaJoin: "Would you like to be a member of Coffee and Code Philly?",
+  doYouHaveCommonSense: "What is 1 + 1?", // This is a trick question
+  guageExperienceLevel:
+    "In what year did you write your first Hello World program?",
+  agreesWithCodeOfConduct:
+    "Do you agree to be excellent towards yourself and other members of the Code and Coffee Philly group?",
+  captureEmail: "What is your email address?",
+};
+
+const CHOICES = {
+  EXPERIENCE_LEVEL: {
+    novice: "less than 1 year",
+    adept: "1-2 years",
+    intermediate: "2-5 years",
+    advanced: "5-8 years",
+    expert: "8-12 years",
+    master: "12+ years",
+  },
+  YES_OR_NO: ["Yes", "No"],
+  ONE_PLUS_ONE: ["3", "2", "Other"],
+};
+
 function OnboardingQuiz(props) {
   const [currentQuestion, setCurrentQuestion] = React.useState(0);
   const [questionsAndChoices, setQuestionsAndChoices] = React.useState([
     {
-      question: "Would you like to be a member of Coffee and Code Philly?",
-      choices: ["Yes", "No", "Maybe another time"],
+      question: QUESTIONS.doYouWannnaJoin,
+      choices: CHOICES.YES_OR_NO,
     },
     {
-      question: "What is 1 + 1?",
-      choices: ["2", "3", "Neither", "Both"],
+      question: QUESTIONS.doYouHaveCommonSense,
+      choices: CHOICES.ONE_PLUS_ONE,
     },
     {
-      question: "In what year did you write your first Hello World program?",
-      choices: [
-        "less than 1 year ago", // Novice
-        "1-3 years ago", // Adept
-        "4-5 years ago", // Intermediate
-        "10 or more years ago", // Advanced
-      ],
+      question: QUESTIONS.guageExperienceLevel,
+      choices: Object.values(CHOICES.EXPERIENCE_LEVEL),
     },
     {
-      question:
-        "Do you agree to be excellent towards yourself and other members of the Code and Coffee Philly group?",
-      choices: ["Yes", "No"],
+      question: QUESTIONS.agreesWithCodeOfConduct,
+      choices: CHOICES.YES_OR_NO,
     },
   ]);
   const [answers, setAnswers] = React.useState([]);
+  const [meetupLink, setMeetupLink] = React.useState(undefined);
+  const [quizCompleted, setQuizCompleted] = React.useState(false);
+  const [quizFailed, setQuizFailed] = React.useState(false);
 
-  const handleSubmit = (event) => {
+  // React.useEffect(() => {
+  //   fetch("/coffee-and-code-philly-w-c03af/us-central1/getMeetupLink", {
+  //     method: "GET",
+  //   })
+  //     // .then((response) => response.json())
+  //     .then(({ data }) => {
+  //       console.log("here", data);
+  //       setMeetupLink(data);
+  //     })
+  //     .catch((err) => console.error("whoops", err));
+  // }, [quizCompleted]);
+
+  const handleSubmit = async (event) => {
     event.preventDefault(); // Prevent the page from refreshing.
-    console.log("Quiz completed!");
-    // TODO: Check for correct answers, if any.
-    // TODO: If quiz was passed, show discord and meetup links.
+    const passedQuiz = await new Validator(QUESTIONS, answers)
+      .runValidations(answers)
+      .catch((err) => false);
+
+    if (passedQuiz) {
+      // TODO: If quiz was passed, show discord and meetup links.
+      setQuizCompleted(true);
+      setQuizFailed(false);
+      setMeetupLink("https://www.meetup.com/coffee-code-philly/"); // TODO: Pull this from firestore
+    } else {
+      setQuizCompleted(true);
+      setQuizFailed(true);
+    }
   };
 
+  //! Fix this: When the user clicks the "next question" button, the previously selected answer will get stored as the new default answer for the current question unless a choice is manually selected before pressing the "next questoin" button.
   const onNextQuestion = (
-    currentQuestionsState,
+    currentQuestionState,
     answersState,
     currentAnswer
   ) => {
     const [currentQuestionIndex, setCurrentQuestionIndex] =
-      currentQuestionsState;
-    const [answers, setAnswers] = answersState;
+      currentQuestionState;
+    const [, setAnswers] = answersState;
 
-    if (currentQuestionIndex <= questionsAndChoices.length) {
-      setAnswers(answers.concat(currentAnswer));
+    if (
+      currentQuestionIndex <= questionsAndChoices.length - 1 &&
+      currentAnswer
+    ) {
+      console.log({ currentAnswer });
+      setAnswers((previousAnswers) => [...previousAnswers, currentAnswer]);
       setCurrentQuestionIndex(currentQuestionIndex + 1);
-    } else {
-      // All questions have been answered
-      handleSubmit();
     }
   };
 
@@ -69,8 +115,9 @@ function OnboardingQuiz(props) {
           .filter((_, index) => index === currentQuestion)
           .map(({ question, choices }, index) => (
             <div className="question" id={`question-${index + 1}`} key={index}>
-              <QuizQuestion
+              <QuizItem
                 question={question}
+                choices={choices}
                 onNextQuestion={(currentAnswer) =>
                   onNextQuestion(
                     [currentQuestion, setCurrentQuestion],
@@ -78,16 +125,24 @@ function OnboardingQuiz(props) {
                     currentAnswer
                   )
                 }
-              >
-                <Choices>
-                  {choices.map((choice, idx) => (
-                    <Choice key={idx}>{choice}</Choice>
-                  ))}
-                </Choices>
-              </QuizQuestion>
+              />
             </div>
           ))}
-        {/** You can only submit the quiz once all questions have been answered */}
+        {quizCompleted && meetupLink && (
+          <p>
+            <a
+              href={meetupLink}
+              target="_blank"
+              rel="noreferrer"
+              style={{ textDecoration: "underline", color: "blue" }}
+            >
+              Click here
+            </a>{" "}
+            to join our Meetup group
+          </p>
+        )}
+
+        {/** A user can only submit the quiz once all questions have been answered */}
         <button
           type="submit"
           hidden={currentQuestion !== questionsAndChoices.length}
@@ -98,6 +153,68 @@ function OnboardingQuiz(props) {
       </form>
     </article>
   );
+}
+class Validator {
+  /**
+   * Creates an instance of Validator.
+   * @param {Array<string>} questions - The array of questions for the onboarding quiz.
+   * @param {Array<string>} answers - The array of answers for the onboarding quiz.
+   */
+  constructor(questions = [], answers = []) {
+    /**
+     * The array of validation functions to be executed.
+     * @type {Array<Function>}
+     */
+    this.validations = [
+      Validator.WantsToJoin,
+      Validator.AgreesWithCodeOfConduct,
+    ];
+
+    this.quizResults = zipObj(Object.values(questions), answers);
+  }
+
+  /**
+   * Checks if the user wants to join.
+   * @param {Array<string>} questions - The array of questions.
+   * @param {Array<string>} choices - The array of choices.
+   * @returns {boolean} - True if the user wants to join, false otherwise.
+   */
+  static WantsToJoin(quizResults) {
+    return Object.entries(quizResults).some(([question, answer]) => {
+      const [yes, _no] = CHOICES.YES_OR_NO;
+      return question === QUESTIONS.doYouWannnaJoin && answer === yes;
+    });
+  }
+
+  /**
+   * Checks if the user agrees with the code of conduct.
+   * @param {Array<string>} questions - The array of questions.
+   * @param {Array<string>} choices - The array of choices.
+   * @returns {boolean} - True if the user agrees with the code of conduct, false otherwise.
+   */
+  static AgreesWithCodeOfConduct(quizResults) {
+    return Object.entries(quizResults).some(([question, answer]) => {
+      const [yes, _no] = CHOICES.YES_OR_NO;
+      return question === QUESTIONS.agreesWithCodeOfConduct && answer === yes;
+    });
+  }
+
+  /**
+   * Runs all the validations.
+   * @returns {Promise<boolean>} - A promise that resolves true if all checks have passed, or rejects with false if any check fails.
+   */
+  runValidations() {
+    const allValiadtionsSucceed = this.validations.every((validator) => {
+      return validator.call(null, this.quizResults);
+    });
+    return new Promise((resolve, reject) => {
+      if (allValiadtionsSucceed) {
+        resolve(true);
+      } else {
+        reject(false);
+      }
+    });
+  }
 }
 
 export default OnboardingQuiz;
