@@ -1,7 +1,8 @@
 {
   "projects": {
     "default": "coffee-and-code-philly-w-c03af",
-    "proj": "coffee-and-code-philly-w-c03af"
+    "proj": "coffee-and-code-philly-w-c03af",
+    "c&c-accelerator-website": "coffee-and-code-philly-w-c03af"
   },
   "targets": {},
   "etags": {},

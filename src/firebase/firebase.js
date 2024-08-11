@@ -61,4 +61,4 @@ const fetchCollectionData = async (collectionName) => {
   }
 };
 
-export { storage, fetchPageData, fetchImageURL };
+export { storage, fetchPageData, fetchImageURL, fetchCollectionData };
