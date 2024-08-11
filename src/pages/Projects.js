@@ -1,7 +1,11 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from "react";
 import AnimationRevealPage from "helpers/AnimationRevealPage.js";
-import { Container, ContentWithPaddingXl } from "components/misc/Layouts";
+import {
+  Container,
+  ContentWithPaddingXl,
+  ContentWithPaddingLg,
+} from "components/misc/Layouts";
 import tw from "twin.macro";
 import { styled, css } from "styled-components";
 import Header from "components/headers/light.js";
