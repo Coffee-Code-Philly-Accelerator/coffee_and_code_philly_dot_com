@@ -1,9 +1,15 @@
 import React from "react";
 import tw from "twin.macro";
 import styled from "styled-components";
-import { css } from "styled-components/macro"; //eslint-disable-line
 
-import Header, { NavLink, NavLinks, PrimaryLink, LogoLink, NavToggle, DesktopNavLinks } from "../headers/light.js";
+import Header, {
+  NavLink,
+  NavLinks,
+  PrimaryLink,
+  LogoLink,
+  NavToggle,
+  DesktopNavLinks,
+} from "../headers/light.js";
 import ResponsiveVideoEmbed from "../../helpers/ResponsiveVideoEmbed.js";
 
 const StyledHeader = styled(Header)`
@@ -58,24 +64,14 @@ const StyledResponsiveVideoEmbed = styled(ResponsiveVideoEmbed)`
 export default () => {
   const navLinks = [
     <NavLinks key={1}>
-      <NavLink href="#">
-        About
-      </NavLink>
-      <NavLink href="#">
-        Blog
-      </NavLink>
-      <NavLink href="#">
-        Locations
-      </NavLink>
-      <NavLink href="#">
-        Pricing
-      </NavLink>
+      <NavLink href="#">About</NavLink>
+      <NavLink href="#">Blog</NavLink>
+      <NavLink href="#">Locations</NavLink>
+      <NavLink href="#">Pricing</NavLink>
     </NavLinks>,
     <NavLinks key={2}>
-      <PrimaryLink href="/#">
-        Hire Us
-      </PrimaryLink>
-    </NavLinks>
+      <PrimaryLink href="/#">Hire Us</PrimaryLink>
+    </NavLinks>,
   ];
 
   return (
@@ -85,7 +81,9 @@ export default () => {
         <StyledHeader links={navLinks} />
         <TwoColumn>
           <LeftColumn>
-            <Notification>We have now launched operations in Europe.</Notification>
+            <Notification>
+              We have now launched operations in Europe.
+            </Notification>
             <Heading>
               <span>Hire the best</span>
               <br />
