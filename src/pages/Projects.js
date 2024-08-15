@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from "react";
 import AnimationRevealPage from "helpers/AnimationRevealPage.js";
 import {
@@ -61,7 +62,7 @@ const AcceleratorCard = styled.div`
   }
 `;
 
-export default ({ headingText = "Accelerator Portfolio" }) => {
+export default function Projects({ headingText = "Accelerator Portfolio" }) {
   const [projectsData, setProjectsData] = useState([]);
   const [headerCardData, setheaderCardData] = useState({});
 
@@ -154,4 +155,4 @@ export default ({ headingText = "Accelerator Portfolio" }) => {
       </Container>
     </AnimationRevealPage>
   );
-};
+}
