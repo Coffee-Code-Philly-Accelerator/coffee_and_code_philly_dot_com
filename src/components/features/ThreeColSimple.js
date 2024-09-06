@@ -1,3 +1,6 @@
+/* eslint-disable react/display-name */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/no-unknown-property */
 import React from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
@@ -27,7 +30,7 @@ const Column = styled.div`
 const Card = styled.a`
   ${tw`flex flex-col items-center text-center h-full mx-4 px-4 py-8 rounded transition-transform duration-300 hover:cursor-pointer transform hover:scale-105 `}
   .imageContainer {
-    ${tw`text-center rounded-full p-4 bg-gray-100`}
+    ${tw`text-center rounded-full p-4 bg-black`}
     img {
       ${tw`w-8 h-8`}
     }
