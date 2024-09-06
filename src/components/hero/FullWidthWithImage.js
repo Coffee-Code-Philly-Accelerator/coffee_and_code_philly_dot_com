@@ -12,7 +12,7 @@ const StyledHeader = styled(Header)`
 `;
 
 const Container = tw.div`relative -mx-8 -mt-8`;
-const TwoColumn = tw.div`flex flex-col lg:flex-row bg-gray-100`;
+const TwoColumn = tw.div`flex flex-col lg:flex-row bg-T3RTIARY-lightest`;
 const LeftColumn = tw.div`ml-8 mr-8 xl:pl-10 py-8`;
 const RightColumn = styled.div`
   background-image: url(${await fetchImageURL("main.png")});
@@ -29,10 +29,10 @@ const Actions = styled.div`
     ${tw`text-center inline-block w-full sm:w-48 py-4 font-semibold tracking-wide rounded hocus:outline-none focus:shadow-outline transition duration-300`}
   }
   .primaryAction {
-    ${tw`bg-primary-500 text-gray-100 hover:bg-primary-700`}
+    ${tw`bg-primary-500 text-black hover:bg-primary-700`}
   }
   .secondaryAction {
-    ${tw`mt-4 sm:mt-0 sm:ml-4 bg-gray-300 text-gray-700 hover:bg-gray-400 hover:text-gray-800`}
+    ${tw`mt-4 sm:mt-0 sm:ml-4 bg-gray-300 text-black hover:bg-gray-400 hover:text-gray-800`}
   }
 `;
 

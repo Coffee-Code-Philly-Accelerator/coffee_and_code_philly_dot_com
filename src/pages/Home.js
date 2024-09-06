@@ -43,7 +43,7 @@ const Home = () => {
             {homeData["heading1"]}
             <wbr />
             <br />
-            <span tw="text-primary-500">{homeData["heading2"]}</span>
+            <span className="text-primary-500">{homeData["heading2"]}</span>
           </>
         }
         description={homeData.description}

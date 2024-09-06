@@ -39,6 +39,19 @@ module.exports = {
         800: "#192b45",
         900: "#16253b",
       },
+      // put in a color pallette that has a4a700 as 500
+      T3RTIARY: {
+        lightest: "#f2f2cc",
+        100: "#e1e1b3",
+        200: "#c3c366",
+        300: "#a5a519",
+        400: "#8f8f00",
+        500: "#a4a700", // This is the specified color
+        600: "#8f8f00",
+        700: "#7a7a00",
+        800: "#656500",
+        900: "#505000",
+      },
 
       gray: {
         lightest: "#d4d2d0",
