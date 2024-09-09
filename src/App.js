@@ -6,6 +6,7 @@ import AboutUs from "./pages/AboutUs";
 import ContactUs from "pages/ContactUs";
 import Layout from "pages/Layout";
 import Home from "pages/Home";
+import Projects from "pages/Projects";
 import OnboardingQuiz from "components/onboarding_quiz/OnboardingQuiz";
 
 const App = () => {
@@ -16,8 +17,7 @@ const App = () => {
       children: [
         { path: "/", element: <Home /> },
         { path: "/about", element: <AboutUs /> },
-        // { path: "/projects", element: <BlogIndex /> },
-        // { path: "/events", element: <Events /> },
+        { path: "/projects", element: <Projects /> },
         { path: "/contact", element: <ContactUs /> },
         { path: "/join-us", element: <OnboardingQuiz /> },
       ],
