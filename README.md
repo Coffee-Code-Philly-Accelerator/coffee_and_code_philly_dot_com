@@ -1,6 +1,6 @@
 # Coffee and Code Philly
 
-## Getting Started
+## Getting Started --- using this repo so I could deploy to vercel: https://github.com/nolanmak/codephiladelphia.com/tree/main
 
 To begin working with this project, follow the steps below to set up your local development environment.
 
